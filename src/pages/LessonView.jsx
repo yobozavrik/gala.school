@@ -14,44 +14,44 @@ export default function LessonView() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-  const loadLesson = async () => {
-    setLoading(true);
-    try {
-      let lessonData;
-      switch(day) {
-        case '1':
-          lessonData = (await import('../data/lessons/day1.js')).day1Content;
-          break;
-        case '2':
-          lessonData = (await import('../data/lessons/day2.js')).day2Content;
-          break;
-        case '3':
-          lessonData = (await import('../data/lessons/day3.js')).day3Content;
-          break;
-        case '4':
-          lessonData = (await import('../data/lessons/day4.js')).day4Content;
-          break;
-        case '5':
-          lessonData = (await import('../data/lessons/day5.js')).day5Content;
-          break;
-        case '6':
-          lessonData = (await import('../data/lessons/day6.js')).day6Content;
-          break;
-        default:
-          throw new Error('Урок не знайдено');
+    const loadLesson = async () => {
+      setLoading(true);
+      try {
+        let lessonData;
+        switch(day) {
+          case '1':
+            lessonData = (await import('../data/lessons/day1.js')).day1Content;
+            break;
+          case '2':
+            lessonData = (await import('../data/lessons/day2.js')).day2Content;
+            break;
+          case '3':
+            lessonData = (await import('../data/lessons/day3.js')).day3Content;
+            break;
+          case '4':
+            lessonData = (await import('../data/lessons/day4.js')).day4Content;
+            break;
+          case '5':
+            lessonData = (await import('../data/lessons/day5.js')).day5Content;
+            break;
+          case '6':
+            lessonData = (await import('../data/lessons/day6.js')).day6Content;
+            break;
+          default:
+            throw new Error('Урок не знайдено');
+        }
+        setLesson(lessonData);
+      } catch (error) {
+        console.error('Помилка завантаження уроку:', error);
+        alert('Помилка завантаження уроку');
+        navigate('/lessons');
+      } finally {
+        setLoading(false);
       }
-      setLesson(lessonData);
-    } catch (error) {
-      console.error('Помилка завантаження уроку:', error);
-      alert('Помилка завантаження уроку');
-      navigate('/lessons');
-    } finally {
-      setLoading(false);
-    }
-  };
+    };
 
-  loadLesson();
-}, [day, navigate]);
+    loadLesson();
+  }, [day, navigate]);
 
   if (loading || !lesson) {
     return (
@@ -69,72 +69,34 @@ export default function LessonView() {
   const isLastStep = currentStep === totalSteps - 1;
 
   const handleNext = () => {
-  if (currentContent.type === 'quiz' && selectedAnswer === null) {
-    alert('Будь ласка, оберіть відповідь');
-    return;
-  }
-
-  if (currentContent.type === 'quiz' && !showResult) {
-    setShowResult(true);
-    if (selectedAnswer === currentContent.correct) {
-      setScore(score + 1);
+    if (currentContent.type === 'quiz' && selectedAnswer === null) {
+      alert('Будь ласка, оберіть відповідь');
+      return;
     }
-    return;
-  }
 
-  if (isLastStep) {
-    const totalQuizzes = lesson.steps.filter(s => s.type === 'quiz').length;
-    const percentage = totalQuizzes > 0 ? Math.round((score / totalQuizzes) * 100) : 100;
-    
-    // ЗБЕРІГАЄМО ПРОГРЕС
-    completeLesson(parseInt(day), percentage);
-    
-    alert(`Вітаємо! Ви завершили День ${day}!\n\nВаш результат: ${score}/${totalQuizzes} (${percentage}%)\nВи заробили 500 грн!`);
-    navigate('/lessons');
-  } else {
-    setCurrentStep(currentStep + 1);
-    setSelectedAnswer(null);
-    setShowResult(false);
-  }
-};
-  
-  const handleNext = () => {
-  if (currentContent.type === 'quiz' && selectedAnswer === null) {
-    alert('Будь ласка, оберіть відповідь');
-    return;
-  }
-
-  if (currentContent.type === 'quiz' && !showResult) {
-    setShowResult(true);
-    if (selectedAnswer === currentContent.correct) {
-      setScore(score + 1);
+    if (currentContent.type === 'quiz' && !showResult) {
+      setShowResult(true);
+      if (selectedAnswer === currentContent.correct) {
+        setScore(score + 1);
+      }
+      return;
     }
-    return;
-  }
 
-  if (isLastStep) {
-    const totalQuizzes = lesson.steps.filter(s => s.type === 'quiz').length;
-    const percentage = totalQuizzes > 0 ? Math.round((score / totalQuizzes) * 100) : 100;
-    
-    // ЗБЕРІГАЄМО ПРОГРЕС
-    completeLesson(parseInt(day), percentage);
-    
-    alert(`Вітаємо! Ви завершили День ${day}!\n\nВаш результат: ${score}/${totalQuizzes} (${percentage}%)\nВи заробили 500 грн!`);
-    navigate('/lessons');
-  } else {
-    setCurrentStep(currentStep + 1);
-    setSelectedAnswer(null);
-    setShowResult(false);
-  }
-};
-
-const handlePrev = () => {
-  if (currentStep > 0) {
-    setCurrentStep(currentStep - 1);
-    setSelectedAnswer(null);
-    setShowResult(false);
-  }
-};
+    if (isLastStep) {
+      const totalQuizzes = lesson.steps.filter(s => s.type === 'quiz').length;
+      const percentage = totalQuizzes > 0 ? Math.round((score / totalQuizzes) * 100) : 100;
+      
+      // ЗБЕРІГАЄМО ПРОГРЕС
+      completeLesson(parseInt(day), percentage);
+      
+      alert(`Вітаємо! Ви завершили День ${day}!\n\nВаш результат: ${score}/${totalQuizzes} (${percentage}%)\nВи заробили 500 грн!`);
+      navigate('/lessons');
+    } else {
+      setCurrentStep(currentStep + 1);
+      setSelectedAnswer(null);
+      setShowResult(false);
+    }
+  };
 
   const handlePrev = () => {
     if (currentStep > 0) {
