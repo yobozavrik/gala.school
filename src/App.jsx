@@ -114,17 +114,22 @@ function Dashboard() {
   );
 }
 
+import { getLessonStatus } from './utils/progressManager';
+
 function Lessons() {
   const [testMode, setTestMode] = useState(false);
   
   const lessons = [
-    { day: 1, title: 'Знайомство з компанією', description: 'Історія, цінності, місія', status: 'in_progress', reward: 500, icon: '🏢' },
-    { day: 2, title: 'Продуктова лінійка', description: 'Пельмені, вареники, хінкалі', status: testMode ? 'not_started' : 'locked', reward: 500, icon: '🥟' },
-    { day: 3, title: 'Робота з касою Poster', description: 'Касова дисципліна', status: testMode ? 'not_started' : 'locked', reward: 500, icon: '💳' },
-    { day: 4, title: 'Техніка продажу', description: 'Презентація, допродажі', status: testMode ? 'not_started' : 'locked', reward: 500, icon: '💼' },
-    { day: 5, title: 'Робота з клієнтами', description: 'Типи клієнтів, конфлікти', status: testMode ? 'not_started' : 'locked', reward: 500, icon: '😊' },
-    { day: 6, title: 'Фінальний іспит', description: 'Перевірка знань', status: testMode ? 'not_started' : 'locked', reward: 500, icon: '🎓' }
-  ];
+    { day: 1, title: 'Знайомство з компанією', description: 'Історія, цінності, місія', reward: 500, icon: '🏢' },
+    { day: 2, title: 'Продуктова лінійка', description: 'Пельмені, вареники, хінкалі', reward: 500, icon: '🥟' },
+    { day: 3, title: 'Робота з касою Poster', description: 'Касова дисципліна', reward: 500, icon: '💳' },
+    { day: 4, title: 'Техніка продажу', description: 'Презентація, допродажі', reward: 500, icon: '💼' },
+    { day: 5, title: 'Робота з клієнтами', description: 'Типи клієнтів, конфлікти', reward: 500, icon: '😊' },
+    { day: 6, title: 'Фінальний іспит', description: 'Перевірка знань', reward: 500, icon: '🎓' }
+  ].map(lesson => ({
+    ...lesson,
+    status: testMode ? 'not_started' : getLessonStatus(lesson.day)
+  }));
 
   const getStatusBadge = (status) => {
     if (status === 'completed') return <span className="bg-green-100 text-green-800 text-xs px-2 py-1 rounded-full">Завершено</span>;
