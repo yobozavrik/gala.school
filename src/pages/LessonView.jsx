@@ -98,12 +98,43 @@ export default function LessonView() {
   }
 };
   
-  // ЗБЕРІГАЄМО ПРОГРЕС
-  completeLesson(parseInt(day), percentage);
-  
-  alert(`Вітаємо! Ви завершили День ${day}!\n\nВаш результат: ${score}/${totalQuizzes} (${percentage}%)\nВи заробили 500 грн!`);
-  navigate('/lessons');
-}
+  const handleNext = () => {
+  if (currentContent.type === 'quiz' && selectedAnswer === null) {
+    alert('Будь ласка, оберіть відповідь');
+    return;
+  }
+
+  if (currentContent.type === 'quiz' && !showResult) {
+    setShowResult(true);
+    if (selectedAnswer === currentContent.correct) {
+      setScore(score + 1);
+    }
+    return;
+  }
+
+  if (isLastStep) {
+    const totalQuizzes = lesson.steps.filter(s => s.type === 'quiz').length;
+    const percentage = totalQuizzes > 0 ? Math.round((score / totalQuizzes) * 100) : 100;
+    
+    // ЗБЕРІГАЄМО ПРОГРЕС
+    completeLesson(parseInt(day), percentage);
+    
+    alert(`Вітаємо! Ви завершили День ${day}!\n\nВаш результат: ${score}/${totalQuizzes} (${percentage}%)\nВи заробили 500 грн!`);
+    navigate('/lessons');
+  } else {
+    setCurrentStep(currentStep + 1);
+    setSelectedAnswer(null);
+    setShowResult(false);
+  }
+};
+
+const handlePrev = () => {
+  if (currentStep > 0) {
+    setCurrentStep(currentStep - 1);
+    setSelectedAnswer(null);
+    setShowResult(false);
+  }
+};
 
   const handlePrev = () => {
     if (currentStep > 0) {
