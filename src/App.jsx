@@ -32,8 +32,6 @@ function Navigation() {
   );
 }
 
-import { getUserProgress } from './utils/progressManager';
-
 function Dashboard() {
   const progress = getUserProgress();
   const percentage = (progress.completedDays.length / progress.totalDays) * 100;
@@ -114,8 +112,6 @@ function Dashboard() {
     </div>
   );
 }
-
-import { getLessonStatus } from './utils/progressManager';
 
 function Lessons() {
   const [testMode, setTestMode] = useState(false);
