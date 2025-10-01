@@ -34,45 +34,54 @@ function Navigation() {
 import { getUserProgress } from './utils/progressManager';
 
 function Dashboard() {
-  const progress = getUserProgress(); // Тепер береться з локальної пам'яті
-
+  const progress = getUserProgress();
   const percentage = (progress.completedDays.length / progress.totalDays) * 100;
 
   return (
     <div className="pb-20 px-4 pt-6 max-w-md mx-auto">
-      <div className="flex items-center justify-center mb-6">
+      {/* Логотип з анімацією */}
+      <div className="flex items-center justify-center mb-6 animate-fade-in">
         <img src="/logo.png" alt="Галя Балувана" className="w-24 h-24 object-contain" />
       </div>
       
-      <div className="mb-6 text-center">
+      {/* Заголовок з анімацією */}
+      <div className="mb-6 text-center animate-slide-up" style={{ animationDelay: '0.1s' }}>
         <h1 className="text-2xl font-bold text-galya-brown">Вітаємо, стажер!</h1>
         <p className="text-galya-brown-light mt-1">Програма навчання</p>
       </div>
 
-      <div className="bg-white rounded-xl shadow-sm p-6 mb-4">
+      {/* Прогрес з анімацією */}
+      <div className="bg-white rounded-xl shadow-sm p-6 mb-4 animate-scale-in" style={{ animationDelay: '0.2s' }}>
         <div className="flex justify-between items-center mb-2">
           <span className="text-sm font-medium text-galya-brown">Ваш прогрес</span>
-          <span className="text-sm text-galya-brown font-bold">{progress.completedDays.length}/{progress.totalDays} днів</span>
+          <span className="text-sm text-galya-brown font-bold">
+            {progress.completedDays.length}/{progress.totalDays} днів
+          </span>
         </div>
-        <div className="w-full bg-gray-200 rounded-full h-3">
-          <div className="bg-galya-brown h-3 rounded-full transition-all duration-300" style={{ width: `${percentage}%` }}></div>
+        <div className="w-full bg-gray-200 rounded-full h-3 overflow-hidden">
+          <div 
+            className="bg-gradient-to-r from-galya-brown to-galya-accent h-3 rounded-full transition-all duration-1000 ease-out"
+            style={{ width: `${percentage}%` }}
+          ></div>
         </div>
       </div>
 
+      {/* Статистика з анімацією */}
       <div className="grid grid-cols-2 gap-4 mb-6">
-        <div className="bg-gradient-to-br from-green-500 to-green-600 rounded-xl p-5 text-white">
+        <div className="bg-gradient-to-br from-green-500 to-green-600 rounded-xl p-5 text-white animate-scale-in hover:scale-105 transition-transform duration-300" style={{ animationDelay: '0.3s' }}>
           <TrendingUp size={28} className="mb-2" />
           <p className="text-2xl font-bold">{progress.moneyEarned} ₴</p>
           <p className="text-sm opacity-90">Заробили</p>
         </div>
-        <div className="bg-gradient-to-br from-galya-brown to-galya-brown-light rounded-xl p-5 text-white">
+        <div className="bg-gradient-to-br from-galya-brown to-galya-brown-light rounded-xl p-5 text-white animate-scale-in hover:scale-105 transition-transform duration-300" style={{ animationDelay: '0.4s' }}>
           <Award size={28} className="mb-2" />
           <p className="text-2xl font-bold">{progress.totalMoney} ₴</p>
           <p className="text-sm opacity-90">Можливо заробити</p>
         </div>
       </div>
 
-      <div className="bg-white rounded-xl shadow-sm p-6 mb-4">
+      {/* Поточний урок з анімацією */}
+      <div className="bg-white rounded-xl shadow-sm p-6 mb-4 animate-slide-up" style={{ animationDelay: '0.5s' }}>
         <div className="flex items-center mb-3">
           <Clock size={22} className="text-galya-brown mr-2" />
           <h2 className="text-lg font-semibold text-galya-brown">Поточний урок</h2>
@@ -83,16 +92,21 @@ function Dashboard() {
               <p className="text-sm text-galya-brown-light">День {progress.currentDay}</p>
               <h3 className="font-semibold text-galya-brown">Знайомство з компанією</h3>
             </div>
-            <span className="bg-yellow-100 text-yellow-800 text-xs px-3 py-1 rounded-full font-medium">В процесі</span>
+            <span className="bg-yellow-100 text-yellow-800 text-xs px-3 py-1 rounded-full font-medium animate-pulse">В процесі</span>
           </div>
           <p className="text-sm text-galya-brown-light mb-3">Дізнайтесь про історію "Галя Балувана", наші цінності та місію</p>
         </div>
-        <Link to="/lessons" className="block w-full bg-gradient-to-r from-galya-brown to-galya-brown-light text-white text-center py-3 rounded-lg font-semibold hover:shadow-lg transition-all">
+        
+        <Link 
+          to="/lessons" 
+          className="block w-full bg-gradient-to-r from-galya-brown to-galya-brown-light text-white text-center py-3 rounded-lg font-semibold hover:shadow-lg hover:scale-105 transition-all duration-300"
+        >
           Продовжити навчання
         </Link>
       </div>
 
-      <div className="bg-gradient-to-r from-galya-accent to-galya-brown-light rounded-xl p-6 text-white">
+      {/* Мотивація з анімацією */}
+      <div className="bg-gradient-to-r from-galya-accent to-galya-brown-light rounded-xl p-6 text-white animate-fade-in" style={{ animationDelay: '0.6s' }}>
         <h3 className="font-semibold mb-2 text-lg">Ви на правильному шляху!</h3>
         <p className="text-sm opacity-95">Завершіть усі 6 днів навчання та отримайте 3000 грн + сертифікат</p>
       </div>
