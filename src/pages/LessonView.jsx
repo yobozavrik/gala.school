@@ -81,17 +81,18 @@ export default function LessonView() {
       return;
     }
 
-    if (isLastStep) {
-      const totalQuizzes = lesson.steps.filter(s => s.type === 'quiz').length;
-      const percentage = totalQuizzes > 0 ? Math.round((score / totalQuizzes) * 100) : 100;
-      alert(`Вітаємо! Ви завершили День ${day}!\n\nВаш результат: ${score}/${totalQuizzes} (${percentage}%)\nВи заробили 500 грн!`);
-      navigate('/lessons');
-    } else {
-      setCurrentStep(currentStep + 1);
-      setSelectedAnswer(null);
-      setShowResult(false);
-    }
-  };
+    import { completeLesson } from '../utils/progressManager';
+
+if (isLastStep) {
+  const totalQuizzes = lesson.steps.filter(s => s.type === 'quiz').length;
+  const percentage = totalQuizzes > 0 ? Math.round((score / totalQuizzes) * 100) : 100;
+  
+  // ЗБЕРІГАЄМО ПРОГРЕС
+  completeLesson(parseInt(day), percentage);
+  
+  alert(`Вітаємо! Ви завершили День ${day}!\n\nВаш результат: ${score}/${totalQuizzes} (${percentage}%)\nВи заробили 500 грн!`);
+  navigate('/lessons');
+}
 
   const handlePrev = () => {
     if (currentStep > 0) {
