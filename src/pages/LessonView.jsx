@@ -82,11 +82,15 @@ export default function LessonView() {
       return;
     }
 
-    import { completeLesson } from '../utils/progressManager';
-
 if (isLastStep) {
   const totalQuizzes = lesson.steps.filter(s => s.type === 'quiz').length;
   const percentage = totalQuizzes > 0 ? Math.round((score / totalQuizzes) * 100) : 100;
+  
+  completeLesson(parseInt(day), percentage);
+  
+  alert(`Вітаємо!...`);
+  navigate('/lessons');
+}
   
   // ЗБЕРІГАЄМО ПРОГРЕС
   completeLesson(parseInt(day), percentage);
