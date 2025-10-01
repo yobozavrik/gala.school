@@ -230,7 +230,7 @@ function ChatPage() {
   setIsLoading(true);
 
   try {
-    const response = await fetch('https://n8n.dmytrotovstytskyi.online/webhook-test/gala.school', {
+    const response = await fetch('https://n8n.dmytrotovstytskyi.online/webhook/gala.school', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
