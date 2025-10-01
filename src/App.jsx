@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { BrowserRouter, Routes, Route, Link, useLocation } from 'react-router-dom';
 import { Home, BookOpen, MessageCircle, User, TrendingUp, Award, Clock, CheckCircle, Circle, Lock, ArrowRight, Send, Bot } from 'lucide-react';
 import LessonView from './pages/LessonView';
+import { getUserProgress, getLessonStatus } from './utils/progressManager';
 
 function Navigation() {
   const location = useLocation();
