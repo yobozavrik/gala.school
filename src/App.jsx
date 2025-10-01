@@ -31,16 +31,12 @@ function Navigation() {
   );
 }
 
-function Dashboard() {
-  const progress = {
-    currentDay: 1,
-    totalDays: 6,
-    completedDays: 0,
-    moneyEarned: 0,
-    totalMoney: 3000
-  };
+import { getUserProgress } from './utils/progressManager';
 
-  const percentage = (progress.completedDays / progress.totalDays) * 100;
+function Dashboard() {
+  const progress = getUserProgress(); // Тепер береться з локальної пам'яті
+
+  const percentage = (progress.completedDays.length / progress.totalDays) * 100;
 
   return (
     <div className="pb-20 px-4 pt-6 max-w-md mx-auto">
@@ -56,7 +52,7 @@ function Dashboard() {
       <div className="bg-white rounded-xl shadow-sm p-6 mb-4">
         <div className="flex justify-between items-center mb-2">
           <span className="text-sm font-medium text-galya-brown">Ваш прогрес</span>
-          <span className="text-sm text-galya-brown font-bold">{progress.completedDays}/{progress.totalDays} днів</span>
+          <span className="text-sm text-galya-brown font-bold">{progress.completedDays.length}/{progress.totalDays} днів</span>
         </div>
         <div className="w-full bg-gray-200 rounded-full h-3">
           <div className="bg-galya-brown h-3 rounded-full transition-all duration-300" style={{ width: `${percentage}%` }}></div>
