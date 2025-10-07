@@ -1,0 +1,27 @@
+[
+  {
+    "name": "Вареники з вишнею",
+    "image": "https://raw.githubusercontent.com/openai/gpt-pull-request/main/assets/galya-products/varenyk-cherry.jpg",
+    "description": "Соковита вишня, ідеальний баланс солодкого та кислого."
+  },
+  {
+    "name": "Хінкалі грузинські",
+    "image": "https://raw.githubusercontent.com/openai/gpt-pull-request/main/assets/galya-products/khinkali.jpg",
+    "description": "Ручна ліпка, ароматні спеції та соковите м'ясо."
+  },
+  {
+    "name": "Пельмені класичні",
+    "image": "https://raw.githubusercontent.com/openai/gpt-pull-request/main/assets/galya-products/pelmeni-classic.jpg",
+    "description": "Традиційний рецепт родини 'Галя Балувана'."
+  },
+  {
+    "name": "Вареники з картоплею та грибами",
+    "image": "https://raw.githubusercontent.com/openai/gpt-pull-request/main/assets/galya-products/varenyk-potato.jpg",
+    "description": "Кремова картопля, обсмажені гриби та карамелізована цибуля."
+  },
+  {
+    "name": "Сирники ванільні",
+    "image": "https://raw.githubusercontent.com/openai/gpt-pull-request/main/assets/galya-products/syrnyky.jpg",
+    "description": "Домашній сир, натуральна ваніль та ніжна текстура."
+  }
+]
