@@ -1,0 +1,1106 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ідеальний Продавець 2.0</title>
+  <style>
+    :root {
+      color-scheme: light dark;
+      --color-bg: #f4ede4;
+      --color-card: #ffffff;
+      --color-text: #3e2f25;
+      --color-subtle: #8a7b70;
+      --color-accent: #d4a373;
+      --color-accent-strong: #b26a3d;
+      --color-border: rgba(62, 47, 37, 0.12);
+      --shadow-soft: 0 12px 30px rgba(30, 20, 10, 0.12);
+    }
+
+    body.dark {
+      --color-bg: #1e1b17;
+      --color-card: #2a2520;
+      --color-text: #f5e9dc;
+      --color-subtle: #c9b9aa;
+      --color-accent: #f1b97a;
+      --color-accent-strong: #f5a351;
+      --color-border: rgba(241, 185, 122, 0.18);
+      --shadow-soft: 0 12px 40px rgba(0, 0, 0, 0.45);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: var(--color-bg);
+      color: var(--color-text);
+      transition: background 0.3s ease, color 0.3s ease;
+    }
+
+    img {
+      max-width: 100%;
+      display: block;
+    }
+
+    .app {
+      min-height: 100vh;
+      max-width: 768px;
+      margin: 0 auto;
+      padding-bottom: 96px;
+    }
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      background: linear-gradient(180deg, rgba(244, 237, 228, 0.95), rgba(244, 237, 228, 0.75));
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--color-border);
+    }
+
+    body.dark header {
+      background: linear-gradient(180deg, rgba(30, 27, 23, 0.95), rgba(30, 27, 23, 0.75));
+    }
+
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 20px;
+    }
+
+    .topbar-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .logo {
+      width: 48px;
+      height: 48px;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: var(--shadow-soft);
+      background: var(--color-card);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .greeting h1 {
+      font-size: 1.2rem;
+      margin: 0;
+    }
+
+    .greeting p {
+      margin: 4px 0 0;
+      color: var(--color-subtle);
+      font-size: 0.9rem;
+    }
+
+    .theme-toggle {
+      border: 1px solid var(--color-border);
+      background: var(--color-card);
+      border-radius: 999px;
+      padding: 8px 14px;
+      font-size: 0.85rem;
+      color: var(--color-text);
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      box-shadow: var(--shadow-soft);
+    }
+
+    main {
+      padding: 20px;
+    }
+
+    .view {
+      display: none;
+      animation: fadeIn 0.35s ease;
+    }
+
+    .view.active {
+      display: block;
+    }
+
+    .card {
+      background: var(--color-card);
+      border-radius: 24px;
+      padding: 24px;
+      box-shadow: var(--shadow-soft);
+      border: 1px solid var(--color-border);
+    }
+
+    .menu-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 16px;
+    }
+
+    .menu-button {
+      padding: 18px;
+      border-radius: 20px;
+      background: linear-gradient(160deg, rgba(212, 163, 115, 0.18), rgba(212, 163, 115, 0.05));
+      border: 1px solid rgba(212, 163, 115, 0.4);
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 12px;
+      cursor: pointer;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      text-align: left;
+    }
+
+    .menu-button:hover,
+    .menu-button:focus-visible {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-soft);
+      outline: none;
+    }
+
+    .menu-button span.icon {
+      font-size: 1.4rem;
+    }
+
+    .menu-button h3 {
+      margin: 0;
+      font-size: 1rem;
+    }
+
+    .menu-button p {
+      margin: 0;
+      color: var(--color-subtle);
+      font-size: 0.8rem;
+    }
+
+    .section-title {
+      margin: 0 0 16px;
+      font-size: 1.4rem;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .accordion-item {
+      border-radius: 18px;
+      border: 1px solid var(--color-border);
+      background: var(--color-card);
+      margin-bottom: 12px;
+      overflow: hidden;
+      box-shadow: var(--shadow-soft);
+    }
+
+    .accordion-header {
+      width: 100%;
+      background: transparent;
+      border: none;
+      padding: 18px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 1rem;
+      cursor: pointer;
+      color: var(--color-text);
+    }
+
+    .accordion-content {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.35s ease;
+      border-top: 1px solid var(--color-border);
+      background: rgba(212, 163, 115, 0.05);
+    }
+
+    .accordion-item.open .accordion-content {
+      padding: 16px 20px 20px;
+      max-height: 400px;
+    }
+
+    .accordion-content p,
+    .accordion-content ul {
+      margin: 0 0 12px;
+      color: var(--color-text);
+      font-size: 0.95rem;
+      line-height: 1.6;
+    }
+
+    .accordion-content ul {
+      padding-left: 18px;
+    }
+
+    .persona-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 14px;
+      margin-bottom: 20px;
+    }
+
+    .persona-card {
+      border-radius: 20px;
+      padding: 18px;
+      border: 1px solid var(--color-border);
+      background: var(--color-card);
+      cursor: pointer;
+      transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .persona-card.active {
+      border-color: var(--color-accent);
+      box-shadow: 0 16px 30px rgba(212, 163, 115, 0.25);
+      transform: translateY(-4px);
+    }
+
+    .chat-wrapper {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      height: calc(100vh - 320px);
+      max-height: 520px;
+    }
+
+    .chat-messages {
+      flex: 1;
+      overflow-y: auto;
+      padding-right: 6px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .message {
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+      animation: fadeIn 0.3s ease;
+    }
+
+    .message.user {
+      flex-direction: row-reverse;
+    }
+
+    .message-avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--color-accent), var(--color-accent-strong));
+      display: grid;
+      place-items: center;
+      color: #fff;
+      flex-shrink: 0;
+    }
+
+    .message.user .message-avatar {
+      background: linear-gradient(135deg, #4f46e5, #7c3aed);
+    }
+
+    .message-bubble {
+      background: rgba(212, 163, 115, 0.1);
+      padding: 14px 16px;
+      border-radius: 18px;
+      line-height: 1.5;
+      border: 1px solid rgba(212, 163, 115, 0.4);
+      max-width: 80%;
+    }
+
+    .message.user .message-bubble {
+      background: linear-gradient(135deg, #4f46e5, #7c3aed);
+      color: #fff;
+      border: none;
+    }
+
+    .message.typing .dot {
+      width: 8px;
+      height: 8px;
+      background: var(--color-subtle);
+      border-radius: 50%;
+      animation: bounce 1s infinite ease-in-out;
+    }
+
+    .message.typing .dot:nth-child(2) {
+      animation-delay: 0.2s;
+    }
+
+    .message.typing .dot:nth-child(3) {
+      animation-delay: 0.4s;
+    }
+
+    .chat-input {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      background: var(--color-card);
+      padding: 12px;
+      border-radius: 20px;
+      box-shadow: var(--shadow-soft);
+      border: 1px solid var(--color-border);
+    }
+
+    .chat-input input {
+      flex: 1;
+      border: none;
+      font-size: 1rem;
+      background: transparent;
+      color: var(--color-text);
+      outline: none;
+    }
+
+    .chat-input button {
+      border: none;
+      border-radius: 16px;
+      padding: 10px 16px;
+      font-size: 0.95rem;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .chat-input button.primary {
+      background: linear-gradient(135deg, var(--color-accent-strong), var(--color-accent));
+      color: #fff;
+      box-shadow: var(--shadow-soft);
+    }
+
+    .chat-input button.secondary {
+      background: rgba(212, 163, 115, 0.15);
+      color: var(--color-text);
+    }
+
+    .chat-input button:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
+    }
+
+    .chat-input button:not(:disabled):active {
+      transform: translateY(2px);
+    }
+
+    .quick-replies {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .quick-reply {
+      border: 1px solid rgba(79, 70, 229, 0.18);
+      background: rgba(79, 70, 229, 0.1);
+      color: #4338ca;
+      padding: 8px 12px;
+      border-radius: 999px;
+      font-size: 0.85rem;
+      cursor: pointer;
+      transition: background 0.2s ease;
+    }
+
+    .quick-reply:hover {
+      background: rgba(79, 70, 229, 0.18);
+    }
+
+    body.dark .quick-reply {
+      color: #c7d2fe;
+      border-color: rgba(199, 210, 254, 0.4);
+      background: rgba(199, 210, 254, 0.1);
+    }
+
+    .product-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 16px;
+    }
+
+    .product-card {
+      background: var(--color-card);
+      border-radius: 20px;
+      overflow: hidden;
+      border: 1px solid var(--color-border);
+      box-shadow: var(--shadow-soft);
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .product-card img {
+      width: 100%;
+      aspect-ratio: 1/1;
+      object-fit: cover;
+    }
+
+    .product-card h4 {
+      margin: 12px 16px 16px;
+      font-size: 0.95rem;
+    }
+
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.5);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      z-index: 100;
+    }
+
+    .modal-backdrop.open {
+      display: flex;
+    }
+
+    .modal-content {
+      background: var(--color-card);
+      border-radius: 24px;
+      max-width: 420px;
+      width: 100%;
+      overflow: hidden;
+      box-shadow: var(--shadow-soft);
+      border: 1px solid var(--color-border);
+    }
+
+    .modal-content img {
+      width: 100%;
+      display: block;
+      object-fit: cover;
+    }
+
+    .modal-content h3 {
+      margin: 0;
+      padding: 16px 20px;
+      font-size: 1.1rem;
+    }
+
+    .status-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+    }
+
+    .status-card {
+      background: var(--color-card);
+      border-radius: 18px;
+      border: 1px solid var(--color-border);
+      padding: 18px;
+      box-shadow: var(--shadow-soft);
+    }
+
+    .contact-list {
+      display: grid;
+      gap: 12px;
+    }
+
+    .contact-card {
+      background: var(--color-card);
+      border-radius: 18px;
+      border: 1px solid var(--color-border);
+      padding: 16px;
+      box-shadow: var(--shadow-soft);
+    }
+
+    footer {
+      position: fixed;
+      bottom: 16px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--color-card);
+      padding: 10px 18px;
+      border-radius: 999px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.85rem;
+      box-shadow: var(--shadow-soft);
+      border: 1px solid var(--color-border);
+    }
+
+    footer span {
+      color: var(--color-subtle);
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes bounce {
+      0%, 80%, 100% { transform: scale(0); opacity: 0.4; }
+      40% { transform: scale(1); opacity: 1; }
+    }
+
+    @media (max-width: 640px) {
+      .app {
+        padding-bottom: 120px;
+      }
+
+      .topbar {
+        padding: 14px 16px;
+      }
+
+      .menu-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .chat-wrapper {
+        max-height: none;
+        height: calc(100vh - 280px);
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <header>
+      <div class="topbar">
+        <div class="topbar-left">
+          <div class="logo">
+            <img src="./logo.png" alt="Галя Балувана" width="40" height="40" />
+          </div>
+          <div class="greeting">
+            <h1 id="greeting-title">Вітаємо!</h1>
+            <p id="greeting-subtitle">Завантаження даних користувача…</p>
+          </div>
+        </div>
+        <button class="theme-toggle" id="themeToggle" type="button" aria-label="Перемкнути тему">
+          <span>🌗</span>
+          <span id="themeLabel">Світла тема</span>
+        </button>
+      </div>
+    </header>
+
+    <main>
+      <section id="home" class="view active">
+        <div class="card">
+          <h2 class="section-title">Ваші інструменти</h2>
+          <div class="menu-grid">
+            <button class="menu-button" data-target="ai">
+              <span class="icon">🤖</span>
+              <h3>ШІ-помічник</h3>
+              <p>Поставте будь-яке робоче питання</p>
+            </button>
+            <button class="menu-button" data-target="knowledge">
+              <span class="icon">📚</span>
+              <h3>База знань</h3>
+              <p>Інструкції та алгоритми</p>
+            </button>
+            <button class="menu-button" data-target="checklists">
+              <span class="icon">✅</span>
+              <h3>Чек-листи</h3>
+              <p>Контроль щоденних задач</p>
+            </button>
+            <button class="menu-button" data-target="products">
+              <span class="icon">🍽️</span>
+              <h3>Наша продукція</h3>
+              <p>Каталог та презентації</p>
+            </button>
+            <button class="menu-button" data-target="tests">
+              <span class="icon">🧠</span>
+              <h3>Перевірка знань</h3>
+              <p>Закріпіть матеріал</p>
+            </button>
+            <button class="menu-button" data-target="contacts">
+              <span class="icon">📞</span>
+              <h3>Корисні контакти</h3>
+              <p>Підтримка та менеджери</p>
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <section id="ai" class="view">
+        <div class="card">
+          <h2 class="section-title">Обрати помічника</h2>
+          <div class="persona-grid" id="personaGrid"></div>
+          <div class="quick-replies" id="quickReplies" aria-live="polite"></div>
+          <div class="chat-wrapper">
+            <div class="chat-messages" id="chatMessages" aria-live="polite"></div>
+            <div class="chat-input">
+              <button class="secondary" id="recordButton" type="button">🎤 Запис</button>
+              <input type="text" id="chatInput" placeholder="Напишіть повідомлення" autocomplete="off" />
+              <button class="primary" id="sendButton" type="button">Надіслати</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="knowledge" class="view">
+        <div class="card">
+          <h2 class="section-title">База знань</h2>
+          <div id="knowledgeAccordion"></div>
+        </div>
+      </section>
+
+      <section id="checklists" class="view">
+        <div class="card">
+          <h2 class="section-title">Чек-листи</h2>
+          <div class="status-grid">
+            <div class="status-card">
+              <h3>Відкриття зміни</h3>
+              <ul>
+                <li>Перевірити чистоту вітрини</li>
+                <li>Увімкнути Poster та перевірити з'єднання</li>
+                <li>Підготувати касу та дрібні гроші</li>
+              </ul>
+            </div>
+            <div class="status-card">
+              <h3>Закриття зміни</h3>
+              <ul>
+                <li>Зробити Z-звіт у ПРРО</li>
+                <li>Передати виручку менеджеру</li>
+                <li>Прибрати та продезінфікувати робоче місце</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="products" class="view">
+        <div class="card">
+          <h2 class="section-title">Наша продукція</h2>
+          <div id="productGrid" class="product-grid" aria-live="polite"></div>
+        </div>
+      </section>
+
+      <section id="tests" class="view">
+        <div class="card">
+          <h2 class="section-title">Перевірка знань</h2>
+          <div class="status-grid">
+            <div class="status-card">
+              <h3>Орієнтація</h3>
+              <p>Пройдено: 2/4 уроків</p>
+              <p>Наступний крок: Продукція</p>
+            </div>
+            <div class="status-card">
+              <h3>Сертифікація</h3>
+              <p>Доступно після завершення базового курсу.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="contacts" class="view">
+        <div class="card">
+          <h2 class="section-title">Корисні контакти</h2>
+          <div class="contact-list">
+            <div class="contact-card">
+              <h3>Менеджер магазину</h3>
+              <p>Анна Мельник</p>
+              <p>Телефон: +380 67 123 45 67</p>
+              <p>Telegram: @anna_support</p>
+            </div>
+            <div class="contact-card">
+              <h3>HR департамент</h3>
+              <p>Email: hr@galya.ua</p>
+              <p>Telegram: @galya_hr</p>
+            </div>
+            <div class="contact-card">
+              <h3>Техпідтримка Poster</h3>
+              <p>Телефон: 0 800 123 456</p>
+              <p>Цілодобово</p>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <div class="modal-backdrop" id="productModal" role="dialog" aria-modal="true" aria-hidden="true">
+    <div class="modal-content">
+      <img id="modalImage" src="" alt="" />
+      <h3 id="modalTitle"></h3>
+    </div>
+  </div>
+
+  <footer>
+    <span>©</span>
+    <span>Галя Балувана · Ідеальний Продавець 2.0</span>
+  </footer>
+
+  <script>
+    const telegram = window.Telegram ? window.Telegram.WebApp : null;
+    let initData = '';
+    const userFallback = { first_name: 'колего' };
+
+    if (telegram) {
+      telegram.ready();
+      telegram.expand();
+      initData = telegram.initData || '';
+      const user = telegram.initDataUnsafe && telegram.initDataUnsafe.user;
+      updateGreeting(user || userFallback);
+      if (telegram.colorScheme === 'dark') {
+        document.body.classList.add('dark');
+        updateThemeLabel();
+      }
+    } else {
+      updateGreeting(userFallback);
+    }
+
+    function updateGreeting(user) {
+      const name = [user.first_name, user.last_name].filter(Boolean).join(' ');
+      document.getElementById('greeting-title').textContent = `Вітаємо, ${name || 'колего'}!`;
+      document.getElementById('greeting-subtitle').textContent = 'Готові розпочати продуктивний день';
+    }
+
+    const themeToggle = document.getElementById('themeToggle');
+    const themeLabel = document.getElementById('themeLabel');
+
+    function updateThemeLabel() {
+      const isDark = document.body.classList.contains('dark');
+      themeLabel.textContent = isDark ? 'Темна тема' : 'Світла тема';
+    }
+
+    themeToggle.addEventListener('click', () => {
+      document.body.classList.toggle('dark');
+      updateThemeLabel();
+    });
+
+    document.querySelectorAll('.menu-button').forEach((button) => {
+      button.addEventListener('click', () => {
+        const target = button.getAttribute('data-target');
+        document.querySelectorAll('.view').forEach((view) => {
+          view.classList.toggle('active', view.id === target);
+        });
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+    });
+
+    const personas = [
+      {
+        id: 'seller',
+        icon: '🛍️',
+        title: 'ШІ-продавець',
+        description: 'Вирішує робочі питання та ситуації з клієнтами',
+        greeting: 'Вітаю! Я ваш ШІ-продавець. Запитуйте про касу, повернення та обслуговування.',
+        quickReplies: [
+          'Повернення без чеку',
+          'Як діяти з агресивним клієнтом?',
+          'Що робити, якщо Poster завис?',
+          'Як оформити знижку постійному клієнту?'
+        ]
+      },
+      {
+        id: 'cosmetologist',
+        icon: '💄',
+        title: 'ШІ-косметолог',
+        description: 'Поради щодо догляду та консультації клієнтів',
+        greeting: 'Привіт! Я допоможу з рекомендаціями косметики та догляду.'
+      },
+      {
+        id: 'tutor',
+        icon: '📘',
+        title: 'Помічник з уроками',
+        description: 'Поясню складні теми з навчальних матеріалів',
+        greeting: 'Вітаю! Готовий пояснити матеріали з вашого навчання.'
+      },
+      {
+        id: 'friend',
+        icon: '💬',
+        title: 'Просто потеревенькати',
+        description: 'Для дружньої розмови та підтримки',
+        greeting: 'Привіт! Я тут, щоб підтримати та поговорити на будь-яку тему.'
+      }
+    ];
+
+    const personaGrid = document.getElementById('personaGrid');
+    const quickRepliesContainer = document.getElementById('quickReplies');
+    const chatMessages = document.getElementById('chatMessages');
+    const chatInput = document.getElementById('chatInput');
+    const sendButton = document.getElementById('sendButton');
+    const recordButton = document.getElementById('recordButton');
+
+    let currentPersona = null;
+    let messages = [];
+    let mediaRecorder = null;
+    let audioChunks = [];
+    let isRecording = false;
+    let typingMessage = null;
+
+    personas.forEach((persona) => {
+      const card = document.createElement('button');
+      card.type = 'button';
+      card.className = 'persona-card';
+      card.innerHTML = `<span class="icon" aria-hidden="true">${persona.icon}</span><h3>${persona.title}</h3><p>${persona.description}</p>`;
+      card.addEventListener('click', () => selectPersona(persona, card));
+      personaGrid.appendChild(card);
+    });
+
+    function selectPersona(persona, card) {
+      currentPersona = persona;
+      messages = [];
+      chatMessages.innerHTML = '';
+      document.querySelectorAll('.persona-card').forEach((el) => el.classList.remove('active'));
+      card.classList.add('active');
+      appendMessage('ai', persona.greeting);
+      updateQuickReplies();
+    }
+
+    function appendMessage(role, content) {
+      const messageEl = document.createElement('div');
+      messageEl.className = `message ${role}`;
+      const avatar = document.createElement('div');
+      avatar.className = 'message-avatar';
+      avatar.textContent = role === 'user' ? 'Ви' : 'ШІ';
+      const bubble = document.createElement('div');
+      bubble.className = 'message-bubble';
+      bubble.innerHTML = content.replace(/\n/g, '<br />');
+      messageEl.append(avatar, bubble);
+      chatMessages.appendChild(messageEl);
+      chatMessages.scrollTo({ top: chatMessages.scrollHeight, behavior: 'smooth' });
+      messages.push({ role, content });
+      return messageEl;
+    }
+
+    function showTyping() {
+      typingMessage = document.createElement('div');
+      typingMessage.className = 'message typing';
+      typingMessage.innerHTML = `
+        <div class="message-avatar">ШІ</div>
+        <div class="message-bubble" role="status">
+          <div style="display:flex; gap:6px;">
+            <span class="dot"></span>
+            <span class="dot"></span>
+            <span class="dot"></span>
+          </div>
+        </div>`;
+      chatMessages.appendChild(typingMessage);
+      chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+
+    function hideTyping() {
+      if (typingMessage && typingMessage.parentNode) {
+        typingMessage.parentNode.removeChild(typingMessage);
+      }
+      typingMessage = null;
+    }
+
+    function updateQuickReplies() {
+      quickRepliesContainer.innerHTML = '';
+      if (!currentPersona || !currentPersona.quickReplies) {
+        return;
+      }
+      currentPersona.quickReplies.forEach((text) => {
+        const chip = document.createElement('button');
+        chip.type = 'button';
+        chip.className = 'quick-reply';
+        chip.textContent = text;
+        chip.addEventListener('click', () => {
+          chatInput.value = text;
+          chatInput.focus();
+        });
+        quickRepliesContainer.appendChild(chip);
+      });
+    }
+
+    function handleSend(payload) {
+      if (!currentPersona) {
+        appendMessage('ai', 'Оберіть спочатку особистість помічника.');
+        return;
+      }
+
+      const requestBody = {
+        persona: currentPersona.id,
+        initData,
+        history: messages.slice(-10),
+        ...payload
+      };
+
+      showTyping();
+      sendButton.disabled = true;
+      recordButton.disabled = true;
+      chatInput.value = '';
+
+      fetch('https://n8n.dmytrotovstytskyi.online/webhook/gala.school', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(requestBody)
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          hideTyping();
+          const output = Array.isArray(data) ? data[0]?.output : data.output;
+          appendMessage('ai', output || 'Вибачте, відповідь тимчасово недоступна.');
+        })
+        .catch(() => {
+          hideTyping();
+          appendMessage('ai', 'Сталася помилка з\'єднання. Спробуйте ще раз пізніше.');
+        })
+        .finally(() => {
+          sendButton.disabled = false;
+          recordButton.disabled = false;
+        });
+    }
+
+    sendButton.addEventListener('click', () => {
+      const text = chatInput.value.trim();
+      if (!text) return;
+      appendMessage('user', text);
+      handleSend({ text });
+    });
+
+    chatInput.addEventListener('keydown', (event) => {
+      if (event.key === 'Enter' && !event.shiftKey) {
+        event.preventDefault();
+        sendButton.click();
+      }
+    });
+
+    async function toggleRecording() {
+      if (isRecording) {
+        mediaRecorder.stop();
+        return;
+      }
+
+      if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+        appendMessage('ai', 'Ваш пристрій не підтримує запис голосу.');
+        return;
+      }
+
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+        mediaRecorder = new MediaRecorder(stream);
+        audioChunks = [];
+        mediaRecorder.start();
+        isRecording = true;
+        recordButton.textContent = '⏹️ Стоп';
+
+        mediaRecorder.addEventListener('dataavailable', (event) => {
+          if (event.data.size > 0) {
+            audioChunks.push(event.data);
+          }
+        });
+
+        mediaRecorder.addEventListener('stop', async () => {
+          isRecording = false;
+          recordButton.textContent = '🎤 Запис';
+          const blob = new Blob(audioChunks, { type: 'audio/webm' });
+          const base64Audio = await blobToBase64(blob);
+          appendMessage('user', 'Надіслано голосове повідомлення.');
+          handleSend({ audio: base64Audio });
+          stream.getTracks().forEach((track) => track.stop());
+        });
+      } catch (error) {
+        appendMessage('ai', 'Не вдалося отримати доступ до мікрофона. Перевірте дозволи.');
+      }
+    }
+
+    recordButton.addEventListener('click', toggleRecording);
+
+    function blobToBase64(blob) {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onloadend = () => resolve(reader.result.split(',')[1]);
+        reader.onerror = reject;
+        reader.readAsDataURL(blob);
+      });
+    }
+
+    const knowledgeData = [
+      {
+        title: 'Касові зміни в Poster',
+        content: `
+          <p><strong>Старт зміни:</strong> Авторизуйтеся, перевірте залишок готівки та запустіть ПРРО.</p>
+          <p><strong>Робота протягом дня:</strong> Слідкуйте за актуальністю меню, фіксуйте всі продажі через Poster.</p>
+          <p><strong>Завершення зміни:</strong> Зробіть звірку готівки, сформуйте Z-звіт та закрийте ПРРО.</p>
+        `
+      },
+      {
+        title: 'ПРРО та фіскалізація',
+        content: `
+          <ul>
+            <li>Увімкніть фіскальний режим перед початком роботи.</li>
+            <li>Перевіряйте статус серверу ДПС — індикатор має бути зеленим.</li>
+            <li>В офлайн-режимі зберігайте чеки та відправляйте їх одразу після відновлення зв'язку.</li>
+          </ul>
+        `
+      },
+      {
+        title: 'Стандарти сервісу',
+        content: `
+          <p>Вітайте кожного гостя посмішкою, пропонуйте допомогу, використовуйте ввічливі звертання.</p>
+          <p>Завжди уточнюйте уподобання клієнта та пропонуйте релевантні допродажі.</p>
+        `
+      },
+      {
+        title: 'Конфліктні ситуації',
+        content: `
+          <p>Зберігайте спокій, вислухайте клієнта, повторіть його проблему своїми словами.</p>
+          <p>Запропонуйте рішення згідно з регламентом та повідомте менеджера за потреби.</p>
+        `
+      },
+      {
+        title: 'Мерчандайзинг',
+        content: `
+          <p>Дотримуйтесь правила FIFO — першим продаємо товар, що був виставлений раніше.</p>
+          <p>Перевіряйте фейсинг кожні 2 години та оновлюйте викладку після пікових годин.</p>
+        `
+      }
+    ];
+
+    const knowledgeAccordion = document.getElementById('knowledgeAccordion');
+    knowledgeData.forEach((item) => {
+      const wrapper = document.createElement('div');
+      wrapper.className = 'accordion-item';
+      wrapper.innerHTML = `
+        <button class="accordion-header" type="button">
+          <span>${item.title}</span>
+          <span aria-hidden="true">➕</span>
+        </button>
+        <div class="accordion-content">${item.content}</div>
+      `;
+      const header = wrapper.querySelector('.accordion-header');
+      header.addEventListener('click', () => {
+        const open = wrapper.classList.toggle('open');
+        header.querySelector('span:last-child').textContent = open ? '➖' : '➕';
+      });
+      knowledgeAccordion.appendChild(wrapper);
+    });
+
+    const PRODUCTS_URL = './data/products.json';
+    const productGrid = document.getElementById('productGrid');
+    const productModal = document.getElementById('productModal');
+    const modalImage = document.getElementById('modalImage');
+    const modalTitle = document.getElementById('modalTitle');
+
+    fetch(PRODUCTS_URL)
+      .then((res) => res.json())
+      .then((products) => {
+        products.forEach((product) => {
+          const card = document.createElement('button');
+          card.type = 'button';
+          card.className = 'product-card';
+          card.innerHTML = `<img src="${product.image}" alt="${product.name}" loading="lazy" /><h4>${product.name}</h4>`;
+          card.addEventListener('click', () => openModal(product));
+          productGrid.appendChild(card);
+        });
+      })
+      .catch(() => {
+        productGrid.innerHTML = '<p>Не вдалося завантажити каталог. Спробуйте пізніше.</p>';
+      });
+
+    function openModal(product) {
+      productModal.classList.add('open');
+      productModal.setAttribute('aria-hidden', 'false');
+      modalImage.src = product.image;
+      modalImage.alt = product.name;
+      modalTitle.textContent = product.name;
+    }
+
+    productModal.addEventListener('click', (event) => {
+      if (event.target === productModal) {
+        closeModal();
+      }
+    });
+
+    function closeModal() {
+      productModal.classList.remove('open');
+      productModal.setAttribute('aria-hidden', 'true');
+      modalImage.src = '';
+      modalImage.alt = '';
+    }
+  </script>
+</body>
+</html>
